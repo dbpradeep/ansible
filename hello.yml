@@ -10,5 +10,5 @@
         content: "hello {{test}}, on Ansible!"
         dest: /tmp/testfile2.txt
         force: yes
-  become: true
+  #become: true
   #become_method: sudo
