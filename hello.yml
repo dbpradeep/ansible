@@ -8,7 +8,7 @@
     - name: Create a file called 'testfile.txt' with content 
       copy:
         content: "hello {{test}}, on Ansible!"
-        dest: /tmp/testfile.txt
+        dest: /tmp/testfile2.txt
         force: yes
   become: true
-  become_method: sudo
+  #become_method: sudo
