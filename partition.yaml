@@ -1,0 +1,34 @@
+---
+- name: Playbook to copy file and uncompress
+  hosts: "{{ variable_host | default('all') }}"
+  become: yes
+  vars:
+    - disk_name : nvme1n1
+    - size: 10
+    - partition_no: 1
+    - filesystem: ext4
+    - mount_path: /mnt
+  tasks:
+  - name: Create a new primary partition with a size of 1GiB
+    parted:
+      device: "/dev/{{ disk_name }}"
+      number: "{{ partition_no }}"
+      state: present
+      part_end: "{{ size }}GiB"
+  #- name: Extend an existing partition to fill all available space
+  #  parted:
+  #    device: "/dev/{{ disk_name }}"
+  #    number: "{{ {{ disk_name }}_info.partitions | length }}"
+  #    part_end: "100%"
+  #    resize: true
+  #    state: present
+  - name: Format partition with ext4
+    filesystem:
+      fstype: "{{ filesystem }}"
+      dev: "/dev/{{ disk_name }}p{{ partition_no }}"
+  - name: mount the partion to 
+    mount:
+      fstype: "{{ filesystem }}"
+      src: "/dev/{{ disk_name }}p{{ partition_no }}"
+      path: "{{ mount_path }}"
+      state: mounted
